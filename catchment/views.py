@@ -2,7 +2,7 @@
 
 from matplotlib import pyplot as plt
 import numpy as np
-
+import pandas as pd
 
 def visualize(data_dict):
     """Display plots of basic statistical properties of the given data.
