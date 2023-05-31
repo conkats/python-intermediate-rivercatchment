@@ -15,3 +15,8 @@ Several tests have been implemented already, some of which are currently failing
 These failing tests set out the requirements for the additional code to be implemented during the workshop.
 
 The tests should be run using `pytest`, which will be introduced during the workshop.
+
+##Training stage
+Section 1: Completed within Sat/Sunday
+
+Section 2:Mon and carry on from Continuous Integration for Automated Testing
