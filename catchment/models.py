@@ -70,4 +70,3 @@ def daily_min(data):
     :returns: A 2D Pandas data frame with mean values of the measurements for each day.
     """
     return data.groupby(data.index.date).min()
-
