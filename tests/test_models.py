@@ -4,6 +4,8 @@ import pandas as pd
 import pandas.testing as pdt
 import datetime
 import pytest
+import numpy.testing as npt
+import numpy as np
 
 '''Adding parameterising our unit tests
 using decorators for scaling up unit testing'''
@@ -134,3 +136,41 @@ def test_daily_min(test_data, test_index, test_columns, expected_data,
                                         index=expected_index, 
                                         columns=expected_columns))
     
+@pytest.mark.parametrize(
+    "test, expected, expect_raises",
+    [
+      
+        # previous test cases here, with None for expect_raises, except for the next one - add ValueError 
+        # as an expected exception (since it has a negative input value)
+        (
+            [[-1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[0, 0.67, 1], [0.67, 0.83, 1], [0.78, 0.89, 1]],
+            ValueError,
+        ),
+        (
+            'hello',
+            None,
+            TypeError,
+        ),
+        (
+            3,
+            None,
+            TypeError,
+        ),
+        (
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[0.33, 0.67, 1], [0.67, 0.83, 1], [0.78, 0.89, 1]],
+            None,
+        )
+        
+    ])
+def test_normalise(test, expected, expect_raises):
+    """Test normalisation works for arrays of one and positive integers."""
+    from catchment.models import data_normalise
+    if isinstance(test, list):
+        test = np.array(test)
+    if expect_raises is not None:
+        with pytest.raises(expect_raises):
+            npt.assert_almost_equal(data_normalise(np.array(test)), np.array(expected), decimal=2)
+    else:
+        npt.assert_almost_equal(data_normalise(np.array(test)), np.array(expected), decimal=2)
