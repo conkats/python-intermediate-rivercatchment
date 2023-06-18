@@ -13,10 +13,10 @@ def main(args):
     - passing data between models and views
     """
     infiles = args.infiles
-    if not isinstance(InFiles, list):
-        InFiles = [args.infiles]
+    if not isinstance(infiles, list):
+        infiles = [args.infiles]
        
-    for filename in InFiles:
+    for filename in infiles:
         measurement_data = models.read_variable_from_csv(filename)
         view_data = {
             'daily sum': models.daily_total(measurement_data),
@@ -24,7 +24,6 @@ def main(args):
             'daily max': models.daily_max(measurement_data), 
             'daily min': models.daily_min(measurement_data)
         }
-        
         views.visualize(view_data)
 
 
