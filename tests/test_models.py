@@ -5,17 +5,19 @@ import pandas.testing as pdt
 import datetime
 import pytest
 
+'''Adding parameterising our unit tests
+using decorators for scaling up unit testing'''
 @pytest.mark.parametrize(
     "test_data, test_index, test_columns, expected_data,\
-      expected_index, expected_columns",
+    expected_index, expected_columns",
     [
         (
-            [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ],
+            [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ], #2x2
             [ pd.to_datetime('2000-01-01 01:00'),
                 pd.to_datetime('2000-01-01 02:00'),
                 pd.to_datetime('2000-01-01 03:00') ],
             [ 'A', 'B' ],
-            [ [0.0, 0.0] ],
+            [ [0.0, 0.0] ],#2x1
             [ datetime.date(2000, 1, 1) ],
             [ 'A', 'B' ]
         ),
@@ -132,9 +134,3 @@ def test_daily_min(test_data, test_index, test_columns, expected_data,
                                         index=expected_index, 
                                         columns=expected_columns))
     
-    def test_daily_min_python_list():
-        """Test for AttributeError when passing a python list"""
-        from catchment.models import daily_min
-
-        with pytest.raises(AttributeError):
-            error_expected = daily_min([[3, 4, 7],[-3, 0, 5]])
