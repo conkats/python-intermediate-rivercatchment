@@ -2,13 +2,15 @@
 
 import pandas as pd
 import pandas.testing as pdt
+from catchment.models import daily_mean
 import datetime
 import pytest
 import numpy.testing as npt
 import numpy as np
 
-'''Adding parameterising our unit tests
+'''Adding parameterising for our unit tests
 using decorators for scaling up unit testing'''
+#for test_daily_mean_integers()
 @pytest.mark.parametrize(
     "test_data, test_index, test_columns, expected_data,\
     expected_index, expected_columns",
@@ -34,6 +36,8 @@ using decorators for scaling up unit testing'''
             [ 'A', 'B' ]
         ),
     ])
+
+
 def test_daily_mean(test_data, test_index, test_columns, expected_data, 
                     expected_index, expected_columns):
     """Test mean function works for array of zeroes and positive integers."""
@@ -43,7 +47,7 @@ def test_daily_mean(test_data, test_index, test_columns, expected_data,
                            pd.DataFrame(data=expected_data, 
                                         index=expected_index, columns=expected_columns))
     
-
+#Test function for daily_max()
 @pytest.mark.parametrize(
     "test_data, test_index, test_columns, expected_data, expected_index,\
     expected_columns",
@@ -89,7 +93,7 @@ def test_daily_max(test_data, test_index, test_columns, expected_data,
                            pd.DataFrame(data=expected_data, 
                                         index=expected_index,
                                         columns=expected_columns))
-
+##est function for daily_min()
 @pytest.mark.parametrize(
     "test_data, test_index, test_columns, expected_data, expected_index,\
      expected_columns",
