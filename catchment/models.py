@@ -24,6 +24,7 @@ def read_variable_from_csv(filename):
     dataset = pd.read_csv(filename, usecols=['Date', 'Site', 'Rainfall (mm)'])
 
     dataset = dataset.rename({'Date':'OldDate'}, axis='columns')
+    #list comprehension
     dataset['Date'] = [pd.to_datetime(x,dayfirst=True) for x in dataset['OldDate']]
     dataset = dataset.drop('OldDate', axis='columns')
 
@@ -94,3 +95,25 @@ def data_normalise(data):
         normalised = data / max[np.newaxis, :]
     normalised[np.isnan(normalised)] = 0
     return normalised
+
+def data_above_threshold(site_id, data, threshold):
+    """Determine whether or not each data value exceeds a given threshold for a given site.
+
+   :param site_id: The identifier for the site column
+   :param data: A 2D Pandas data frame with measurement data. Columns are measurement sites.
+   :param threshold: A threshold value to check against
+   :returns: An integer representing the number of data points over a given threshold
+    """
+    #map(f, C) is a function that takes another function f() and a 
+    #collection C of data items as inputs, applying the function f(x)
+    def count_above_threshold(a,b):
+        if b:
+            return a+1
+        else:
+            return a
+    
+    # Use map to determine if each daily inflammation value exceeds a given threshold for a patient
+    above_threshold=  map(lambda x:x > threshold, data[site_id])
+
+     # Use reduce to count on how many data points are above a threshold for a site
+     return reduce(count_above_threshold, above_threshold, 0)
