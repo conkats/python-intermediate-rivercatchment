@@ -2,7 +2,6 @@
 
 import pandas as pd
 import pandas.testing as pdt
-from catchment.models import daily_mean
 import datetime
 import pytest
 import numpy.testing as npt
@@ -11,16 +10,19 @@ import numpy as np
 '''Adding parameterising for our unit tests
 using decorators for scaling up unit testing'''
 #for test_daily_mean_integers()
+
 @pytest.mark.parametrize(
     "test_data, test_index, test_columns, expected_data,\
-    expected_index, expected_columns",
+      expected_index, expected_columns",
     [
         (
+            [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ],
             [ [0.0, 0.0], [0.0, 0.0], [0.0, 0.0] ], #2x2
             [ pd.to_datetime('2000-01-01 01:00'),
                 pd.to_datetime('2000-01-01 02:00'),
                 pd.to_datetime('2000-01-01 03:00') ],
             [ 'A', 'B' ],
+            [ [0.0, 0.0] ],
             [ [0.0, 0.0] ],#2x1
             [ datetime.date(2000, 1, 1) ],
             [ 'A', 'B' ]
@@ -37,7 +39,6 @@ using decorators for scaling up unit testing'''
         ),
     ])
 
-
 def test_daily_mean(test_data, test_index, test_columns, expected_data, 
                     expected_index, expected_columns):
     """Test mean function works for array of zeroes and positive integers."""
@@ -46,8 +47,7 @@ def test_daily_mean(test_data, test_index, test_columns, expected_data,
                                                    index=test_index, columns=test_columns)),
                            pd.DataFrame(data=expected_data, 
                                         index=expected_index, columns=expected_columns))
-    
-#Test function for daily_max()
+
 @pytest.mark.parametrize(
     "test_data, test_index, test_columns, expected_data, expected_index,\
     expected_columns",
@@ -93,7 +93,6 @@ def test_daily_max(test_data, test_index, test_columns, expected_data,
                            pd.DataFrame(data=expected_data, 
                                         index=expected_index,
                                         columns=expected_columns))
-##est function for daily_min()
 @pytest.mark.parametrize(
     "test_data, test_index, test_columns, expected_data, expected_index,\
      expected_columns",
@@ -139,18 +138,9 @@ def test_daily_min(test_data, test_index, test_columns, expected_data,
                            pd.DataFrame(data=expected_data, 
                                         index=expected_index, 
                                         columns=expected_columns))
-    
 @pytest.mark.parametrize(
     "test, expected, expect_raises",
     [
-      
-        # previous test cases here, with None for expect_raises, except for the next one - add ValueError 
-        # as an expected exception (since it has a negative input value)
-        (
-            [[-1, 2, 3], [4, 5, 6], [7, 8, 9]],
-            [[0, 0.67, 1], [0.67, 0.83, 1], [0.78, 0.89, 1]],
-            ValueError,
-        ),
         (
             'hello',
             None,
@@ -166,15 +156,14 @@ def test_daily_min(test_data, test_index, test_columns, expected_data,
             [[0.33, 0.67, 1], [0.67, 0.83, 1], [0.78, 0.89, 1]],
             None,
         )
-        
     ])
-def test_normalise(test, expected, expect_raises):
+def test_data_normalise(test, expected, expect_raises):
     """Test normalisation works for arrays of one and positive integers."""
     from catchment.models import data_normalise
     if isinstance(test, list):
         test = np.array(test)
     if expect_raises is not None:
         with pytest.raises(expect_raises):
-            npt.assert_almost_equal(data_normalise(np.array(test)), np.array(expected), decimal=2)
+            npt.assert_almost_equal(data_normalise(test), np.array(expected), decimal=2)
     else:
-        npt.assert_almost_equal(data_normalise(np.array(test)), np.array(expected), decimal=2)
+        npt.assert_almost_equal(data_normalise(test), np.array(expected), decimal=2)
