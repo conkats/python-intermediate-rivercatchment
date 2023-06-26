@@ -106,6 +106,7 @@ def data_above_threshold(site_id, data, threshold):
     """
     #map(f, C) is a function that takes another function f() and a 
     #collection C of data items as inputs, applying the function f(x)
+    from functools import reduce
     def count_above_threshold(a,b):
         if b:
             return a+1
@@ -115,5 +116,5 @@ def data_above_threshold(site_id, data, threshold):
     # Use map to determine if each daily inflammation value exceeds a given threshold for a patient
     above_threshold=  map(lambda x:x > threshold, data[site_id])
 
-     # Use reduce to count on how many data points are above a threshold for a site
-     return reduce(count_above_threshold, above_threshold, 0)
+    # Use reduce to count on how many data points are above a threshold for a site
+    return reduce(count_above_threshold, above_threshold, 0)
