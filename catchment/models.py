@@ -9,6 +9,13 @@ time across all sites.
 
 import pandas as pd
 
+#a class representing a measurement site
+class Site:
+    def __init__(self, name):
+        self.name = name
+        self.measurements = {}
+
+
 def read_variable_from_csv(filename):
     """Reads a named variable from a CSV file, and returns a
     pandas dataframe containing that variable. The CSV file must contain
