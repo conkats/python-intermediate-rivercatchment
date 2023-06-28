@@ -11,9 +11,32 @@ import pandas as pd
 
 #a class representing a measurement site
 class Site:
+    """A measurement site in the study."""
+    #dunder method
     def __init__(self, name):
         self.name = name
         self.measurements = {}
+
+    def add_measurement(self, measurement_id, data):
+        if measurement_id in self.measurements.keys():
+            self.measurements[measurement_id] = \
+                    pd.concat([self.measurements[measurement_id], data])
+        
+        else:
+            self.measurements[measurement_id] = data
+            self.measurements[measurement_id].name = measurement_id
+    
+    #display the object's name 
+    #converts an object into its string representation,
+    def __str__(self):
+        return self.name
+    #add a property method  which will return the last data point in 
+    # each measurement series, combined into a single dataframe:
+    @property
+    def last_measurements(self):
+        return pd.concat(
+            [self.measurements[key].series[-1:] for key in self.measurements.keys()],
+            axis=1).sort_index() 
 
 
 def read_variable_from_csv(filename):

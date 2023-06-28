@@ -97,3 +97,39 @@ print(type(my_set))
 #from catchment.models import Site
 #FP35 = Site('FP35')
 #print(FP35.name)
+
+'''Encapsulating behaviour'''
+#from catchment.models import Site
+#import datetime
+#
+#FP35 = Site('FP35')
+#print(FP35)
+#
+#rainfall_data = pd.Series(
+#    [0.0,2.0,1.0],
+#    index=[
+#        datetime.date(2000,1,1),
+#        datetime.date(2000,1,2),
+#        datetime.date(2000,1,3)
+#        ]
+#    )
+#
+#FP35.add_measurement('Rainfall',rainfall_data)
+#
+#print(FP35.measurements.keys())
+#print(FP35.measurements['Rainfall'])
+
+#Dunder Method
+class Book:
+    """A class to represent a book which has
+     a title, an author and shows "title by author"""
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def __str__(self):
+         return self.title + ' by ' +self.author
+
+book = Book('A Book', 'Me')
+
+print(book)
