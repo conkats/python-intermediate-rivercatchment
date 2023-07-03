@@ -9,6 +9,28 @@ time across all sites.
 
 import pandas as pd
 
+# implementing the collection of measurement 
+# sets as a dictionary with a known set of keys
+# in a new class that contains Pandas Series
+'''Composition'''
+class MeasurementSeries:
+    def __init__(self, series, name, units):
+        self.series = series
+        self.name = name
+        self.units = units
+        self.series.name = self.name
+
+    def add_measurement(self, data):
+        self.series = pd.concat([self.series,data])
+        self.series.name = self.name
+    
+    def __str__(self):
+        if self.units:
+            return f"{self.name} ({self.units})"
+        else:
+            return self.name
+        
+
 #a class representing a measurement site
 class Site:
     """A measurement site in the study."""
@@ -17,28 +39,26 @@ class Site:
         self.name = name
         self.measurements = {}
 
-    def add_measurement(self, measurement_id, data):
+    def add_measurement(self, measurement_id, data, units=None):    
         if measurement_id in self.measurements.keys():
-            self.measurements[measurement_id] = \
-                    pd.concat([self.measurements[measurement_id], data])
-        
-        else:
-            self.measurements[measurement_id] = data
-            self.measurements[measurement_id].name = measurement_id
+            self.measurements[measurement_id].add_measurement(data)
     
-    #display the object's name 
-    #converts an object into its string representation,
-    def __str__(self):
-        return self.name
+        else:
+            self.measurements[measurement_id] = MeasurementSeries(data, measurement_id, units)
+    
     #add a property method  which will return the last data point in 
     # each measurement series, combined into a single dataframe:
     @property
     def last_measurements(self):
         return pd.concat(
             [self.measurements[key].series[-1:] for key in self.measurements.keys()],
-            axis=1).sort_index() 
+            axis=1).sort_index()
 
-
+    #display the object's name 
+    #converts an object into its string representation,
+    def __str__(self):
+        return self.name
+    
 def read_variable_from_csv(filename):
     """Reads a named variable from a CSV file, and returns a
     pandas dataframe containing that variable. The CSV file must contain
