@@ -9,6 +9,10 @@ time across all sites.
 
 import pandas as pd
 
+
+# If the class inherits from another class,
+#  we include the parent class name in brackets.
+
 # implementing the collection of measurement 
 # sets as a dictionary with a known set of keys
 # in a new class that contains Pandas Series
@@ -19,7 +23,7 @@ class MeasurementSeries:
         self.name = name
         self.units = units
         self.series.name = self.name
-
+    
     def add_measurement(self, data):
         self.series = pd.concat([self.series,data])
         self.series.name = self.name
@@ -30,13 +34,27 @@ class MeasurementSeries:
         else:
             return self.name
         
-
-#a class representing a measurement site
-class Site:
-    """A measurement site in the study."""
-    #dunder method
+# If the class inherits from another class, we include 
+# the parent class name in brackets.
+"""Inheritance from from Site and MeasurementSeries """
+class Location:
     def __init__(self, name):
         self.name = name
+
+    def __str__(self):
+        return self.name
+    
+#a class representing a measurement site
+#If class X inherits from (is a) class Y, 
+# we say that Y is
+#the superclass or parent class of X, 
+# or X is a subclass of Y.
+class Site(Location):
+    """A measurement site in the study."""
+    #dunder method
+    def __init__(self,name):
+        #inherits the behaviour from super class location
+        super().__init__(name)
         self.measurements = {}
 
     def add_measurement(self, measurement_id, data, units=None):    
@@ -45,7 +63,7 @@ class Site:
     
         else:
             self.measurements[measurement_id] = MeasurementSeries(data, measurement_id, units)
-    
+ 
     #add a property method  which will return the last data point in 
     # each measurement series, combined into a single dataframe:
     @property
@@ -53,11 +71,6 @@ class Site:
         return pd.concat(
             [self.measurements[key].series[-1:] for key in self.measurements.keys()],
             axis=1).sort_index()
-
-    #display the object's name 
-    #converts an object into its string representation,
-    def __str__(self):
-        return self.name
     
 def read_variable_from_csv(filename):
     """Reads a named variable from a CSV file, and returns a
