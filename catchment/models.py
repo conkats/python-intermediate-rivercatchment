@@ -9,7 +9,6 @@ time across all sites.
 
 import pandas as pd
 
-
 # If the class inherits from another class,
 #  we include the parent class name in brackets.
 
@@ -38,9 +37,10 @@ class MeasurementSeries:
 # the parent class name in brackets.
 """Inheritance from from Site and MeasurementSeries """
 class Location:
+    """A Location."""
     def __init__(self, name):
         self.name = name
-
+    #convert the object to string
     def __str__(self):
         return self.name
     
@@ -72,6 +72,21 @@ class Site(Location):
             [self.measurements[key].series[-1:] for key in self.measurements.keys()],
             axis=1).sort_index()
     
+class Catchment(Location):
+    """A catchment area in the study."""
+    def __init__(self, name):
+        super().__init__(name)
+        self.sites = {}
+
+    def add_site(self, new_site):
+        # Basic check to see if the site has already been added 
+        # to the catchment area 
+        for site in self.sites:
+            if site == new_site:
+                print(f'{new_site} has already been added to site list')
+                return
+
+        self.sites[new_site.name] = Site(new_site)
 def read_variable_from_csv(filename):
     """Reads a named variable from a CSV file, and returns a
     pandas dataframe containing that variable. The CSV file must contain

@@ -133,3 +133,33 @@ class Book:
 book = Book('A Book', 'Me')
 
 print(book)
+
+#Composition
+class Machine:
+     pass
+
+class Printer(Machine):
+     pass
+
+class Scanner(Machine):
+     pass
+
+class Copier(Printer, Scanner):
+     #Copier `is a` Printer and `is a` Scanner
+     pass
+
+# vs inheritance
+class Machine:
+    pass
+
+class Printer(Machine):
+    pass
+
+class Scanner(Machine):
+    pass
+
+class Copier(Machine):
+    def __init__(self):
+        # Copier `has a` Printer and `has a` Scanner
+        self.printer = Printer()
+        self.scanner = Scanner()
