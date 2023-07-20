@@ -8,6 +8,8 @@ time across all sites.
 """
 
 import pandas as pd
+import numpy as np
+
 
 # If the class inherits from another class,
 #  we include the parent class name in brackets.
@@ -151,3 +153,24 @@ def daily_min(data):
     """
     return data.groupby(data.index.date).min()
 
+def data_normalise(data):
+    """
+    Normalise any given 2D data array
+    
+    NaN values are replaced with a value of 0
+    
+    :param data: 2D array of inflammation data
+    :type data: ndarray
+
+    """
+    if not isinstance(data, np.ndarray) or not isinstance(data, pd.DataFrame):
+        raise TypeError('data input should be DataFrame or ndarray')
+    if len(data.shape) != 2:
+        raise ValueError('data array should be 2-dimensional')
+    if np.any(data < 0):
+        raise ValueError('Measurement values should be non-negative')
+    max = np.nanmax(data, axis=0)
+    with np.errstate(invalid='ignore', divide='ignore'):
+        normalised = data / max[np.newaxis, :]
+    normalised[np.isnan(normalised)] = 0
+    return normalised
